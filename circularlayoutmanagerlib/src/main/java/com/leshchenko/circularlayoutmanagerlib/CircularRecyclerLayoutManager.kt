@@ -1,4 +1,4 @@
-package com.leshchenko.circularlayoutmanager
+package com.leshchenko.circularlayoutmanagerlib
 
 import android.graphics.PointF
 import android.util.SparseArray
