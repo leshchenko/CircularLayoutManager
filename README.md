@@ -2,9 +2,8 @@
 
 Simple in usage Recycler Layout Manager with circular item positioning.
 
-![](animation.gif)
-![](example.gif)
-![](example2.gif)
+|  ![](animation.gif) | ![](example.gif)  |  ![](example2.gif) |
+|---|---|---|
 
 ## What's new
 
