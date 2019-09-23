@@ -14,7 +14,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        circularRecycler.layoutManager = CircularRecyclerLayoutManager()
+        circularRecycler.layoutManager = CircularRecyclerLayoutManager(
+            canScrollHorizontally = true,
+            itemsPerCircle = 4,
+            anglePerItem = 100.0,
+            firstCircleRadius = 200.0,
+            angleStepForCircles = 45.0
+        )
         circularRecycler.adapter = Adapter()
     }
 
