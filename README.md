@@ -40,7 +40,7 @@ allprojects {
 ```
 - Add this to your app's `build.gradle`:
 ```
-implementation 'com.github.leshchenko:CircularLayoutManager:1.0.1'
+implementation 'com.github.leshchenko:CircularLayoutManager:1.1.1'
 ```
 
 ```
