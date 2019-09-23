@@ -3,24 +3,35 @@
 Simple in usage Recycler Layout Manager with circular item positioning.
 
 ![](animation.gif)
+![](example.gif)
+![](example2.gif)
 
+## What's new
+
+1.1.0 - Now you can configure some individual components like `anglePerItem`, `firstCircleRadius`, `angleStepForCircles`. Also horizontal scrolling works, it moves all elements by a circle.
 
 ## Usage
-Register configuration providers like this:
-```java
+Just add a `CircularRecyclerLayoutManager` as a layout manager for your recycler view.
+```kotlin
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        circularRecycler.layoutManager = CircularRecyclerLayoutManager()
+        circularRecycler.layoutManager = CircularRecyclerLayoutManager(
+                   canScrollHorizontally = true,
+                   itemsPerCircle = 4,
+                   anglePerItem = 100.0,
+                   firstCircleRadius = 200.0,
+                   angleStepForCircles = 45.0
+               )
         circularRecycler.adapter = Adapter()
     }
 }
 ```
 
 ### Installation
-- Add this to your project level `build.gradle`:
+- Add this to your project level `build.gradle`: 
 ```
 allprojects {
     repositories {

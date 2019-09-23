@@ -9,7 +9,8 @@ class CircularRecyclerLayoutManager(
     private val itemsPerCircle: Int = 6,
     private var anglePerItem: Double = Double.NaN,
     private var firstCircleRadius: Double = Double.NaN,
-    private var angleStepForCircles: Double = Double.NaN
+    private var angleStepForCircles: Double = Double.NaN,
+    private val canScrollHorizontally: Boolean = false
 ) : RecyclerView.LayoutManager() {
     override fun generateDefaultLayoutParams() =
         RecyclerView.LayoutParams(
@@ -17,7 +18,7 @@ class CircularRecyclerLayoutManager(
             RecyclerView.LayoutParams.MATCH_PARENT
         )
 
-    override fun canScrollHorizontally() = false
+    override fun canScrollHorizontally() = canScrollHorizontally
 
     override fun canScrollVertically() = true
 
@@ -47,9 +48,11 @@ class CircularRecyclerLayoutManager(
 
         val circleRadius = firstCircleRadius + (itemWidth * 1.5 * circleOrderPosition)
 
-        val angleStep = if(angleStepForCircles.isNaN()) anglePerItem.div(2) else angleStepForCircles
+        val angleStep =
+            if (angleStepForCircles.isNaN()) anglePerItem.div(2) else angleStepForCircles
 
-        val angle = (anglePerItem * position) + if (circleOrderPosition.isDivideByTwo()) 0.0 else angleStep
+        val angle =
+            (anglePerItem * position) + if (circleOrderPosition.isDivideByTwo()) 0.0 else angleStep
 
         val positionData = calculatePosition(circleRadius, angle)
 
@@ -184,10 +187,26 @@ class CircularRecyclerLayoutManager(
         val firstCircleLength = 2 * Math.PI * firstCircleRadius
         itemWidth = ((firstCircleLength / (itemsPerCircle)) * 0.4).toInt()
         if (anglePerItem.isNaN()) {
-            anglePerItem = 360 / if (itemCount > itemsPerCircle) itemsPerCircle.toDouble() else itemCount.toDouble()
+            anglePerItem =
+                360 / if (itemCount > itemsPerCircle) itemsPerCircle.toDouble() else itemCount.toDouble()
         }
     }
 
-    inner class ItemData(val initialRadius: Double, var currentRadius: Double, val angle: Double)
+    override fun scrollHorizontallyBy(
+        dx: Int,
+        recycler: RecyclerView.Recycler?,
+        state: RecyclerView.State?
+    ): Int {
+        for (position in 0 until viewCalculation.size()) {
+            if (shouldItemMove(position).not()) {
+                continue
+            }
+            viewCalculation.get(position).angle += dx * 0.1
+        }
+        updateViews(recycler)
+        return dx
+    }
+
+    inner class ItemData(val initialRadius: Double, var currentRadius: Double, var angle: Double)
     inner class PositionData(val left: Int, val top: Int, val right: Int, val bottom: Int)
 }
