@@ -6,17 +6,19 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class CircularRecyclerLayoutManager(
-        private val itemsPerCircle: Int = 6,
-        private var anglePerItem: Double = Double.NaN,
-        private var firstCircleRadius: Double = Double.NaN,
-        private var angleStepForCircles: Double = Double.NaN,
-        private val canScrollHorizontally: Boolean = false
+    private val itemsPerCircle: Int = 6,
+    private var anglePerItem: Double = Double.NaN,
+    private var firstCircleRadius: Double = Double.NaN,
+    private var angleStepForCircles: Double = Double.NaN,
+    private val canScrollHorizontally: Boolean = false,
+    private val initialAngle: Double = 0.0,
+    private val isClockwise: Boolean = true
 ) : RecyclerView.LayoutManager() {
     override fun generateDefaultLayoutParams() =
-            RecyclerView.LayoutParams(
-                    RecyclerView.LayoutParams.MATCH_PARENT,
-                    RecyclerView.LayoutParams.MATCH_PARENT
-            )
+        RecyclerView.LayoutParams(
+            RecyclerView.LayoutParams.MATCH_PARENT,
+            RecyclerView.LayoutParams.MATCH_PARENT
+        )
 
     override fun canScrollHorizontally() = canScrollHorizontally
 
@@ -24,8 +26,8 @@ class CircularRecyclerLayoutManager(
 
     override fun measureChildWithMargins(child: View, widthUsed: Int, heightUsed: Int) {
         child.measure(
-                View.MeasureSpec.makeMeasureSpec(widthUsed, View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(heightUsed, View.MeasureSpec.EXACTLY)
+            View.MeasureSpec.makeMeasureSpec(widthUsed, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(heightUsed, View.MeasureSpec.EXACTLY)
         )
     }
 
@@ -48,9 +50,11 @@ class CircularRecyclerLayoutManager(
 
         val circleRadius = firstCircleRadius + (itemWidth * 1.5 * circleOrderPosition)
 
-        val angleStep = if (angleStepForCircles.isNaN()) anglePerItem.div(2) else angleStepForCircles
+        val angleStep =
+            if (angleStepForCircles.isNaN()) anglePerItem.div(2) else angleStepForCircles
 
-        val angle = (anglePerItem * position) + if (circleOrderPosition.isDivideByTwo()) 0.0 else angleStep
+        val direction = if (isClockwise) -1 else 1
+        val angle = (anglePerItem * position * direction) + if (circleOrderPosition.isDivideByTwo()) initialAngle else angleStep
 
         val positionData = calculatePosition(circleRadius, angle)
 
@@ -87,9 +91,9 @@ class CircularRecyclerLayoutManager(
     }
 
     override fun scrollVerticallyBy(
-            dy: Int,
-            recycler: RecyclerView.Recycler?,
-            state: RecyclerView.State?
+        dy: Int,
+        recycler: RecyclerView.Recycler?,
+        state: RecyclerView.State?
     ): Int {
         updateCalculation(dy)
         updateViews(recycler)
@@ -114,10 +118,10 @@ class CircularRecyclerLayoutManager(
     }
 
     private fun layoutItemIfNeeded(
-            positionData: PositionData,
-            data: ItemData,
-            recycler: RecyclerView.Recycler?,
-            position: Int
+        positionData: PositionData,
+        data: ItemData,
+        recycler: RecyclerView.Recycler?,
+        position: Int
     ) {
         if (isViewVisible(positionData) && data.currentRadius > 0.0) {
             recycler?.getViewForPosition(position)?.let { viewForPosition ->
@@ -130,8 +134,8 @@ class CircularRecyclerLayoutManager(
     }
 
     private fun updateAllChild(
-            viewsForDetaching: MutableList<View>,
-            updatedPositions: MutableList<Int>
+        viewsForDetaching: MutableList<View>,
+        updatedPositions: MutableList<Int>
     ) {
         for (position in 0 until childCount) {
             getChildAt(position)?.let { childAt ->
@@ -185,14 +189,15 @@ class CircularRecyclerLayoutManager(
         val firstCircleLength = 2 * Math.PI * firstCircleRadius
         itemWidth = ((firstCircleLength / (itemsPerCircle)) * 0.4).toInt()
         if (anglePerItem.isNaN()) {
-            anglePerItem = 360 / if (itemCount > itemsPerCircle) itemsPerCircle.toDouble() else itemCount.toDouble()
+            anglePerItem =
+                360 / if (itemCount > itemsPerCircle) itemsPerCircle.toDouble() else itemCount.toDouble()
         }
     }
 
     override fun scrollHorizontallyBy(
-            dx: Int,
-            recycler: RecyclerView.Recycler?,
-            state: RecyclerView.State?
+        dx: Int,
+        recycler: RecyclerView.Recycler?,
+        state: RecyclerView.State?
     ): Int {
         for (position in 0 until viewCalculation.size()) {
             if (shouldItemMove(position).not()) {

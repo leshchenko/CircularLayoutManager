@@ -19,7 +19,9 @@ class MainActivity : AppCompatActivity() {
             itemsPerCircle = 4,
             anglePerItem = 100.0,
             firstCircleRadius = 200.0,
-            angleStepForCircles = 45.0
+            angleStepForCircles = 45.0,
+            isClockwise = false,
+            initialAngle = 180.0
         )
         circularRecycler.adapter = Adapter()
     }
