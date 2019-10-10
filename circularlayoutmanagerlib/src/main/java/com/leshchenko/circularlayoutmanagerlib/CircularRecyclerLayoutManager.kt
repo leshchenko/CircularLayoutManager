@@ -50,11 +50,13 @@ class CircularRecyclerLayoutManager(
 
         val circleRadius = firstCircleRadius + (itemWidth * 1.5 * circleOrderPosition)
 
-        val angleStep =
-            if (angleStepForCircles.isNaN()) anglePerItem.div(2) else angleStepForCircles
+        val angleStep = if (angleStepForCircles.isNaN()) anglePerItem.div(2) else angleStepForCircles
 
         val direction = if (isClockwise) -1 else 1
-        val angle = (anglePerItem * position * direction) + if (circleOrderPosition.isDivideByTwo()) initialAngle else angleStep
+        val maxAngle = anglePerItem * itemsPerCircle
+        val angleCalculation = (anglePerItem * position * direction) % maxAngle
+        val angleOffset = if (circleOrderPosition.isDivideByTwo()) angleStep else 0.0
+        val angle = (angleCalculation + angleOffset + initialAngle)
 
         val positionData = calculatePosition(circleRadius, angle)
 
