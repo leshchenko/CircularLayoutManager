@@ -7,6 +7,8 @@ Simple in usage Recycler Layout Manager with circular item positioning.
 
 ## What's new
 
+1.1.5 - Small fixes.
+
 1.1.4 - Small fixes.
 
 1.1.2 - Add possibility change initial angle and clockwise/counter-clockwise direction.
@@ -46,7 +48,7 @@ allprojects {
 ```
 - Add this to your app's `build.gradle`:
 ```
-implementation 'com.github.leshchenko:CircularLayoutManager:1.1.4'
+implementation 'com.github.leshchenko:CircularLayoutManager:1.1.5'
 ```
 
 ```
