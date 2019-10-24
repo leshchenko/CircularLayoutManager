@@ -11,6 +11,7 @@ class CircularRecyclerLayoutManager(
     private var firstCircleRadius: Double = Double.NaN,
     private var angleStepForCircles: Double = Double.NaN,
     private val canScrollHorizontally: Boolean = false,
+    private val canScrollVertically: Boolean = true,
     private val initialAngle: Double = 0.0,
     private val isClockwise: Boolean = true
 ) : RecyclerView.LayoutManager() {
@@ -22,7 +23,7 @@ class CircularRecyclerLayoutManager(
 
     override fun canScrollHorizontally() = canScrollHorizontally
 
-    override fun canScrollVertically() = true
+    override fun canScrollVertically() = canScrollVertically
 
     override fun measureChildWithMargins(child: View, widthUsed: Int, heightUsed: Int) {
         child.measure(
