@@ -7,6 +7,8 @@ Simple in usage Recycler Layout Manager with circular item positioning.
 
 ## What's new
 
+1.1.6 - Now you can disable vertical scroll.
+
 1.1.5 - Small fixes.
 
 1.1.4 - Small fixes.
